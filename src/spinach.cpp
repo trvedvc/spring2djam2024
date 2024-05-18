@@ -7,16 +7,27 @@
 
 using namespace std;
 
+#define GROWING 0
+#define GROWN 1
+
+vector<Color> colors = {LIME, GREEN};
+
 // ----------------------------------------------- Spinach class
 Spinach::Spinach(Vector2 xy) {
     pos = xy;
     health = 1;
+    state = GROWING;
+    picked = false;
 }
 
 Spinach::~Spinach() {}
 
 void Spinach::draw() {
-    DrawCircle(pos.x, pos.y, 10, GREEN);
+    DrawCircle(pos.x, pos.y, 10, colors[state]);
+}
+
+void Spinach::grow() {
+    if (state == GROWING) state = GROWN;
 }
 
 
@@ -38,9 +49,15 @@ void SpinachVec::draw() {
     }
 }
 
+void SpinachVec::grow() {
+    for ( Spinach * spinach : spinaches ) {
+        spinach->grow();
+    }
+}
+
 void SpinachVec::update() {
     for ( auto it = spinaches.begin(); it != spinaches.end(); ) {
-        if ( (*it)->health <= 0 ) {
+        if ( (*it)->health <= 0 || (*it)->picked ) {
             delete *it;
             it = spinaches.erase(it);
         } else {it++;}

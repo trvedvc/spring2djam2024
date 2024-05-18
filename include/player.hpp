@@ -13,6 +13,9 @@ class Player {
         float speed;
         Vector2 dir;
 
+        int money;
+
+        int seeds;
         float plant_CD;
         float remaining_plant_CD;
         bool can_plant;
@@ -20,10 +23,11 @@ class Player {
         Player(Vector2 xy);
         ~Player();
 
-        void update(float &delta);
+        void update(float &delta, SpinachVec & spinach_vec);
         void move(const float &delta);
         void draw();
         void plant(SpinachVec &spinachVec);
+        void pickUp(SpinachVec &spinachVec);
         
 };
 

@@ -12,10 +12,15 @@ class Spinach {
         Vector2 pos;
         float health;
 
-        void draw();
+        int state;
+        bool picked;
 
         Spinach(Vector2 xy);
         ~Spinach();
+
+        void draw();
+        void grow();
+
 };
 
 class SpinachVec {
@@ -28,6 +33,7 @@ class SpinachVec {
         void add(Spinach * spinach);
         void draw();
         void update();
+        void grow();
 };
 
 #endif

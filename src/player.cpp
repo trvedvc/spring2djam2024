@@ -13,18 +13,28 @@ Player::Player(Vector2 xy) {
     speed = 250;
     dir = Vector2{0,0};
 
-    plant_CD = 2;
+    money = 0;
+
+    seeds = 5;
+    plant_CD = 1;
     remaining_plant_CD = 0;
     can_plant = true;
 }
 
 Player::~Player() {}
 
-void Player::update(float &delta) {
+void Player::update(float &delta, SpinachVec &spinach_vec) {
     if ( remaining_plant_CD < 0 ) {
         can_plant = true;
     } else {
         remaining_plant_CD -= delta;
+    }
+
+    for ( Spinach * spinach : spinach_vec.spinaches ) {
+        if ( CheckCollisionCircles(pos, 10, spinach->pos, 10) && spinach->state == 1) {
+            cout << " pi/n";
+            spinach->picked = true;
+        }
     }
 }
 
@@ -38,9 +48,12 @@ void Player::draw() {
 }
 
 void Player::plant(SpinachVec &spinach_vec) {
-    if (can_plant) {
+    if (can_plant && seeds > 0) {
         spinach_vec.add(new Spinach(pos));
         can_plant = false;
         remaining_plant_CD = plant_CD;
+        seeds -= 1;
     }
 }
+
+void Player::pickUp(SpinachVec & spinach_vec) {;}

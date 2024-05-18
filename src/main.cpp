@@ -7,6 +7,9 @@
 
 using namespace std;
 
+#define DAY 0
+#define NIGHT 1
+
 int main () {
 
     const int screenWidth = 800;
@@ -29,6 +32,8 @@ int main () {
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
+    int daytime = DAY;
+
     while (WindowShouldClose() == false){
         delta = GetFrameTime();
 // logic
@@ -39,11 +44,26 @@ int main () {
         if (IsKeyDown(KEY_D)) player.dir.x = 1;
         player.move(delta);
 
-        if (IsKeyDown(KEY_E)) player.plant(spinach_vec);
-        if (IsKeyDown(KEY_F)) enemy_vec.add(new Enemy(player.pos));
+        if ( IsKeyPressed(KEY_N) ) {
+            if (daytime == DAY) daytime = NIGHT;
+            else {
+                daytime = DAY;
+                spinach_vec.grow();
+            }
+        }
+
+        if (IsKeyPressed(KEY_E)) {
+            if ( daytime == DAY ) player.plant(spinach_vec);
+        }
+        if (IsKeyPressed(KEY_Q)) {
+            if ( daytime == DAY ) player.pickUp(spinach_vec);
+        }
+        if (IsKeyPressed(KEY_F)) {
+            if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos));
+        }
 
 
-        player.update(delta);
+        player.update(delta, spinach_vec);
         enemy_vec.update(delta, spinach_vec);
         enemy_vec.move(delta);
 
@@ -53,7 +73,9 @@ int main () {
 
 // draw
         BeginDrawing();
-        ClearBackground(BLACK);
+        if ( daytime == DAY) {
+            ClearBackground(DARKGREEN);
+        } else { ClearBackground(DARKBLUE);}
 
         BeginMode2D(camera);
             DrawRectangleLines(0,0,800,600,BLUE);
@@ -61,6 +83,9 @@ int main () {
             spinach_vec.draw();
             enemy_vec.draw();
         EndMode2D();
+
+        DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
+        DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
 
 
         EndDrawing();
