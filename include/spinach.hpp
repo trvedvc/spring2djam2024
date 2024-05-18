@@ -10,6 +10,7 @@ using namespace std;
 class Spinach {
     public:
         Vector2 pos;
+        float health;
 
         void draw();
 
@@ -19,13 +20,14 @@ class Spinach {
 
 class SpinachVec {
     public:
-        vector<Spinach *> spinach_vec;
+        vector<Spinach *> spinaches;
         
         SpinachVec();
         ~SpinachVec();
 
         void add(Spinach * spinach);
         void draw();
+        void update();
 };
 
 #endif

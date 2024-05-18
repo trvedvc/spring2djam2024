@@ -3,6 +3,7 @@
 
 #include "../include/player.hpp"
 #include "../include/spinach.hpp"
+#include "../include/enemy.hpp"
 
 using namespace std;
 
@@ -18,7 +19,9 @@ int main () {
 
     Player player(Vector2{400,300});
     
-    SpinachVec spinachVec;
+    SpinachVec spinach_vec;
+
+    EnemyVec enemy_vec;
 
     Camera2D camera = {0};
     camera.target = (Vector2){ player.pos.x, player.pos.y};
@@ -36,9 +39,15 @@ int main () {
         if (IsKeyDown(KEY_D)) player.dir.x = 1;
         player.move(delta);
 
-        if (IsKeyDown(KEY_E)) player.plant(spinachVec);
+        if (IsKeyDown(KEY_E)) player.plant(spinach_vec);
+        if (IsKeyDown(KEY_F)) enemy_vec.add(new Enemy(player.pos));
+
 
         player.update(delta);
+        enemy_vec.update(delta, spinach_vec);
+        enemy_vec.move(delta);
+
+        spinach_vec.update();
 
         camera.target = (Vector2){ player.pos.x, player.pos.y};
 
@@ -47,9 +56,12 @@ int main () {
         ClearBackground(BLACK);
 
         BeginMode2D(camera);
+            DrawRectangleLines(0,0,800,600,BLUE);
             player.draw();
-            spinachVec.draw();
+            spinach_vec.draw();
+            enemy_vec.draw();
         EndMode2D();
+
 
         EndDrawing();
     }
