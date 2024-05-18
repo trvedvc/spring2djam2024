@@ -27,7 +27,6 @@ class Player {
         void move(const float &delta);
         void draw();
         void plant(SpinachVec &spinachVec);
-        void pickUp(SpinachVec &spinachVec);
         
 };
 

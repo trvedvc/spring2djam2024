@@ -55,5 +55,3 @@ void Player::plant(SpinachVec &spinach_vec) {
         seeds -= 1;
     }
 }
-
-void Player::pickUp(SpinachVec & spinach_vec) {;}
