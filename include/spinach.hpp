@@ -10,22 +10,30 @@ using namespace std;
 class Spinach {
     public:
         Vector2 pos;
+        float health;
 
-        void draw();
+        int state;
+        bool picked;
 
         Spinach(Vector2 xy);
         ~Spinach();
+
+        void draw();
+        void grow();
+
 };
 
 class SpinachVec {
     public:
-        vector<Spinach *> spinach_vec;
+        vector<Spinach *> spinaches;
         
         SpinachVec();
         ~SpinachVec();
 
         void add(Spinach * spinach);
         void draw();
+        void update();
+        void grow();
 };
 
 #endif
