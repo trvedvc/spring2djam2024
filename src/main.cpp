@@ -55,8 +55,7 @@ int main () {
 
     while (WindowShouldClose() == false){
         
-        if(playgame==0){
-            
+        if(playgame==0){   
             while(! didClick(playbutton)){
 
                 BeginDrawing();
@@ -67,7 +66,10 @@ int main () {
             
                 WaitTime(0.1);
                 cout<<GetMouseX()<<' '<<GetMouseY()<<' '<<playbutton.x<<' '<<playbutton.y<<endl;
-        player.move(delta);
+            }
+        }
+        
+
 // Bullet
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
             Vector2 facing = Vector2Normalize(Vector2Subtract(GetMousePosition(),Vector2{screenWidth/2,screenHeight/2}));
@@ -99,10 +101,17 @@ int main () {
     //Planting
 
         if (IsKeyPressed(KEY_E)) {
-            if ( daytime == DAY ) player.plant(spinach_vec);
+            if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,32));
         }
         if (IsKeyPressed(KEY_F)) {
             if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos));
+        }
+        if ( IsKeyPressed(KEY_N) ) {
+            if (daytime == DAY) daytime = NIGHT;
+            else {
+                daytime = DAY;
+                spinach_vec.grow();
+            }
         }
 
         player.update(delta, spinach_vec);
@@ -111,16 +120,6 @@ int main () {
 
         spinach_vec.update();
         
-            bullets.update(delta);
-
-            if ( IsKeyPressed(KEY_N) ) {
-                if (daytime == DAY) daytime = NIGHT;
-                else {
-                    daytime = DAY;
-                    spinach_vec.grow();
-                }
-            }
-
         BeginMode2D(camera);
             DrawRectangleLines(0,0,1920,1080,BLUE);
             player.draw();
@@ -151,7 +150,7 @@ int main () {
             BeginMode2D(camera);
                 DrawRectangleLines(0,0,800,600,BLUE);
                 player.draw();
-                bullets.draw();
+                bullet_vec.draw();
                 spinach_vec.draw();
                 enemy_vec.draw();
             EndMode2D();
@@ -161,7 +160,9 @@ int main () {
 
 
             EndDrawing();
-    }
+            }
+    
+    
 
     UnloadTexture(settxt);
     CloseWindow();
