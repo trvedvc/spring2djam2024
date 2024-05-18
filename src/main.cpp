@@ -67,6 +67,7 @@ int main () {
                 WaitTime(0.1);
                 cout<<GetMouseX()<<' '<<GetMouseY()<<' '<<playbutton.x<<' '<<playbutton.y<<endl;
             }
+            playgame=1;
         }
         
 
@@ -77,18 +78,8 @@ int main () {
         }
        
         bullet_vec.update(delta, enemy_vec.enemies);
-
-        if ( IsKeyPressed(KEY_N) ) {
-            if (daytime == DAY) daytime = NIGHT;
-            else {
-                daytime = DAY;
-                spinach_vec.grow();
-            }
-            playgame=1;
-            
-        }
-            
-            delta = GetFrameTime();
+    
+        delta = GetFrameTime();
     // logic
     //Player movement
             player.dir = Vector2{0,0};
