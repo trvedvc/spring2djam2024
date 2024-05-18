@@ -13,7 +13,7 @@ Player::Player(Vector2 xy) {
     speed = 250;
     dir = Vector2{0,0};
 
-    plant_CD = 2;
+    plant_CD = 0.5;
     remaining_plant_CD = 0;
     can_plant = true;
 }
