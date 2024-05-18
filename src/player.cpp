@@ -9,7 +9,7 @@
 
 using namespace std;
 
-Player::Player(Vector2 xy) {
+Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed) {
     pos = xy;
     speed = 250;
     dir = Vector2{0,0};
@@ -19,12 +19,17 @@ Player::Player(Vector2 xy) {
     reload = reload_time;
     can_shoot = true;
 
+    framecounter=0;
+    idle=idlePassed;
+    running=runningPassed;
     money = 0;
 
     seeds = 5;
     plant_CD = 0.5;
     remaining_plant_CD = 0;
     can_plant = true;
+
+    
 }
 
 Player::~Player() {}
@@ -55,7 +60,8 @@ void Player::move(const float &delta) {
 }
 
 void Player::draw() {
-    DrawCircle(pos.x, pos.y, 10, WHITE);
+
+    DrawTexture(idle,pos.x,pos.y,WHITE);
 }
 
 void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {

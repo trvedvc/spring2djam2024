@@ -21,15 +21,17 @@ int main () {
     const int screenHeight = 1080;
 
     InitWindow(screenWidth, screenHeight, "title");
+    //LOAD TEXTURES
     Texture2D settxt= LoadTexture("assets/settings.png");
-
+    Texture2D popeye_idle = LoadTexture("assets/Player/PlayerIdleexport.png");
+    Texture2D popeye_running = LoadTexture("assets/Player/PlayerRunningexport.png");
     SetTargetFPS(60);
 
      
 
     float delta;
 
-    Player player(Vector2{400,300});
+    Player player(Vector2{400,300},popeye_idle,popeye_running);
     
     SpinachVec spinach_vec;
 
@@ -156,6 +158,8 @@ int main () {
     
 
     UnloadTexture(settxt);
+    UnloadTexture(popeye_idle);
+    UnloadTexture(popeye_running);
     CloseWindow();
     return 0;
 }

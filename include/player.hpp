@@ -18,6 +18,10 @@ class Player {
         float reload;
         bool can_shoot;
 
+        int framecounter;
+        Texture2D idle;
+        Texture2D running;
+
         int money;
 
         int seeds;
@@ -25,7 +29,7 @@ class Player {
         float remaining_plant_CD;
         bool can_plant;
 
-        Player(Vector2 xy);
+        Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed);
         ~Player();
 
         void update(float &delta, SpinachVec & spinach_vec);
