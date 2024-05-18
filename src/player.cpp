@@ -12,16 +12,21 @@ using namespace std;
 Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed) {
     pos = xy;
     speed = 250;
-    dir = Vector2{0,0};
+    dir = {0,0};
 
     dmg = 1;
     reload_time = 1;
     reload = reload_time;
     can_shoot = true;
 
-    framecounter=0;
+    frame_counter=0;
+    current_frame=0;
     idle=idlePassed;
     running=runningPassed;
+    frame_rec = {0,0,164,160};
+    frame_speed = 6;
+    shift_vector = Vector2{frame_rec.width/2,frame_rec.height/2};
+
     money = 0;
 
     seeds = 5;
@@ -60,8 +65,15 @@ void Player::move(const float &delta) {
 }
 
 void Player::draw() {
-
-    DrawTexture(idle,pos.x,pos.y,WHITE);
+    frame_counter++;
+     if (frame_counter >= (60/frame_speed))
+        {
+            frame_counter = 0;
+            current_frame++;
+            if (current_frame > 4) current_frame = 0;
+            frame_rec.x = current_frame*frame_rec.width;
+        }
+    DrawTextureRec(idle,frame_rec,Vector2Subtract(pos,shift_vector),WHITE);
 }
 
 void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {

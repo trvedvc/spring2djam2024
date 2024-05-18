@@ -18,9 +18,13 @@ class Player {
         float reload;
         bool can_shoot;
 
-        int framecounter;
+        int frame_counter;
         Texture2D idle;
         Texture2D running;
+        Rectangle frame_rec;
+        int frame_speed;
+        int current_frame;
+        Vector2 shift_vector;
 
         int money;
 
