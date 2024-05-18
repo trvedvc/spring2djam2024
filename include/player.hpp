@@ -4,7 +4,7 @@
 #include "raylib.h"
 
 #include "spinach.hpp"
-
+#include "bullet.hpp"
 using namespace std;
 
 class Player {
@@ -23,8 +23,7 @@ class Player {
         void update(float &delta);
         void move(const float &delta);
         void draw();
-        void plant(SpinachVec &spinachVec);
-        
+        void plant(SpinachVec &spinachVec);    
 };
 
 #endif

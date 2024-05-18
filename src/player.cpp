@@ -5,6 +5,7 @@
 #include "raymath.h"
 
 #include "../include/player.hpp"
+#include "../include/bullet.hpp"
 
 using namespace std;
 
