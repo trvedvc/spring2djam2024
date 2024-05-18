@@ -35,8 +35,7 @@ int main () {
 
     EnemyVec enemy_vec;
 
-    BulletVec bullets;
-
+    BulletVec bullet_vec;
 
     Camera2D camera = {0};
     camera.target = (Vector2){ player.pos.x, player.pos.y};
@@ -49,6 +48,7 @@ int main () {
 
     Rectangle playbutton = {screenWidth/4,3*screenHeight/4,screenWidth/2,screenHeight/8};
     int playgame = 0;
+
 
 
 
@@ -67,6 +67,20 @@ int main () {
             
                 WaitTime(0.1);
                 cout<<GetMouseX()<<' '<<GetMouseY()<<' '<<playbutton.x<<' '<<playbutton.y<<endl;
+        player.move(delta);
+// Bullet
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+            Vector2 facing = Vector2Normalize(Vector2Subtract(GetMousePosition(),Vector2{screenWidth/2,screenHeight/2}));
+            player.shoot(bullet_vec, facing);
+        }
+       
+        bullet_vec.update(delta, enemy_vec.enemies);
+
+        if ( IsKeyPressed(KEY_N) ) {
+            if (daytime == DAY) daytime = NIGHT;
+            else {
+                daytime = DAY;
+                spinach_vec.grow();
             }
             playgame=1;
             
@@ -84,10 +98,18 @@ int main () {
             player.move(delta);
     //Planting
 
-    // Bullet
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-                bullets.add(player.pos,Vector2Normalize(Vector2{(float) GetMouseX()-screenWidth/2,(float) GetMouseY()-screenHeight/2}));
-            }
+        if (IsKeyPressed(KEY_E)) {
+            if ( daytime == DAY ) player.plant(spinach_vec);
+        }
+        if (IsKeyPressed(KEY_F)) {
+            if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos));
+        }
+
+        player.update(delta, spinach_vec);
+        enemy_vec.update(delta, spinach_vec);
+        enemy_vec.move(delta);
+
+        spinach_vec.update();
         
             bullets.update(delta);
 
@@ -99,12 +121,16 @@ int main () {
                 }
             }
 
-            if (IsKeyPressed(KEY_E)) {
-                if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,32));
-            }
-            if (IsKeyPressed(KEY_F)) {
-                if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos));
-            }
+        BeginMode2D(camera);
+            DrawRectangleLines(0,0,1920,1080,BLUE);
+            player.draw();
+            bullet_vec.draw();
+            spinach_vec.draw();
+            enemy_vec.draw();
+        EndMode2D();
+
+        DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
+        DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
 
 
             player.update(delta, spinach_vec);

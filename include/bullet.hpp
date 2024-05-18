@@ -4,6 +4,7 @@
 #include "raylib.h"
 
 #include "player.hpp"
+#include "enemy.hpp"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ class Bullet {
 
         Bullet(Vector2 xy,Vector2 facing);
 
-        void update(float &delta);
+        bool update(float &delta, vector<Enemy*> &enemies);
         void draw();
         void redefine(Vector2 xy,Vector2 facing);
 };
@@ -28,7 +29,7 @@ class BulletVec {
         BulletVec();
         ~BulletVec();
 
-        void update(float &delta);
+        void update(float &delta, vector<Enemy*> &enemies);
         void add(Vector2 xy,Vector2 facing);
         void draw();
 };  

@@ -14,6 +14,11 @@ Player::Player(Vector2 xy) {
     speed = 250;
     dir = Vector2{0,0};
 
+    dmg = 1;
+    reload_time = 1;
+    reload = reload_time;
+    can_shoot = true;
+
     money = 0;
 
     seeds = 5;
@@ -33,9 +38,14 @@ void Player::update(float &delta, SpinachVec &spinach_vec) {
 
     for ( Spinach * spinach : spinach_vec.spinaches ) {
         if ( CheckCollisionCircles(pos, 10, spinach->pos, 10) && spinach->state == 1) {
-            cout << " pi/n";
             spinach->picked = true;
         }
+    }
+
+    if ( reload < 0 ) {
+        can_shoot = true;
+    } else {
+        reload -= delta;
     }
 }
 
@@ -62,4 +72,12 @@ void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {
                 seeds -= 1;
             }
     }
+}
+
+void Player::shoot(BulletVec &bullet_vec, Vector2 &facing) {
+    if ( can_shoot ) {
+        bullet_vec.add(pos, facing);
+        can_shoot = false;
+        reload = reload_time;
+    } 
 }

@@ -13,12 +13,14 @@ class Enemy {
         float speed;
         Vector2 dir;
 
+        int health;
+
         Spinach * target;
 
         Enemy(Vector2 xy);
         ~Enemy();
 
-        void update(float &delta, SpinachVec & spinach_vec);
+        bool update(SpinachVec & spinach_vec);
         void move(const float &delta);
         void draw();
 };
@@ -35,7 +37,6 @@ class EnemyVec {
         void update(float &delta, SpinachVec & spinach_vec);
         void move(float &delta);
         void draw();
-        //void collision_check(SpinachVec & spinach_vec);
 };
 
 #endif
