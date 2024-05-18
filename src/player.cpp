@@ -48,11 +48,18 @@ void Player::draw() {
     DrawCircle(pos.x, pos.y, 10, WHITE);
 }
 
-void Player::plant(SpinachVec &spinach_vec) {
+void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {
     if (can_plant && seeds > 0) {
-        spinach_vec.add(new Spinach(pos));
-        can_plant = false;
-        remaining_plant_CD = plant_CD;
-        seeds -= 1;
+        bool spaceforplant = true;
+        for ( Spinach * spinach : spinach_vec.spinaches ) {
+            if((spinach->pos.x == plantpos.x)&&(spinach->pos.y == plantpos.y))
+                {spaceforplant=false;}
+            }
+            if(spaceforplant){
+                spinach_vec.add(new Spinach(plantpos));
+                can_plant = false;
+                remaining_plant_CD = plant_CD;
+                seeds -= 1;
+            }
     }
 }

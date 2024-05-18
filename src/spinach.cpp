@@ -9,12 +9,14 @@ using namespace std;
 
 #define GROWING 0
 #define GROWN 1
+#define SIZE 32
 
 vector<Color> colors = {LIME, GREEN};
 
 // ----------------------------------------------- Spinach class
 Spinach::Spinach(Vector2 xy) {
     pos = xy;
+    rec = {pos.x,pos.y,SIZE,SIZE};
     health = 1;
     state = GROWING;
     picked = false;
@@ -23,7 +25,7 @@ Spinach::Spinach(Vector2 xy) {
 Spinach::~Spinach() {}
 
 void Spinach::draw() {
-    DrawCircle(pos.x, pos.y, 10, colors[state]);
+    DrawRectangleRec(rec,colors[state]);
 }
 
 void Spinach::grow() {

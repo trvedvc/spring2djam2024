@@ -11,7 +11,7 @@ class Spinach {
     public:
         Vector2 pos;
         float health;
-
+        Rectangle rec;
         int state;
         bool picked;
 

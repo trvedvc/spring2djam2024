@@ -26,7 +26,7 @@ class Player {
         void update(float &delta, SpinachVec & spinach_vec);
         void move(const float &delta);
         void draw();
-        void plant(SpinachVec &spinachVec);    
+        void plant(SpinachVec &spinachVec,Vector2 plantpos);    
 };
 
 #endif
