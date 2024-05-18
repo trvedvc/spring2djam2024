@@ -13,6 +13,11 @@ class Player {
         float speed;
         Vector2 dir;
 
+        int dmg;
+        float reload_time;
+        float reload;
+        bool can_shoot;
+
         int money;
 
         int seeds;
@@ -26,7 +31,8 @@ class Player {
         void update(float &delta, SpinachVec & spinach_vec);
         void move(const float &delta);
         void draw();
-        void plant(SpinachVec &spinachVec);    
+        void plant(SpinachVec &spinachVec);
+        void shoot(BulletVec &bullet_vec, Vector2 &facing);
 };
 
 #endif

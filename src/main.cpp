@@ -14,8 +14,8 @@ using namespace std;
 
 int main () {
 
-    const int screenWidth = 800;
-    const int screenHeight = 600;
+    const int screenWidth = 1920;
+    const int screenHeight = 1080;
 
     InitWindow(screenWidth, screenHeight, "title");
     SetTargetFPS(60);
@@ -28,8 +28,7 @@ int main () {
 
     EnemyVec enemy_vec;
 
-    BulletVec bullets;
-
+    BulletVec bullet_vec;
 
     Camera2D camera = {0};
     camera.target = (Vector2){ player.pos.x, player.pos.y};
@@ -38,6 +37,7 @@ int main () {
     camera.zoom = 1.0f;
 
     int daytime = DAY;
+
 
     while (WindowShouldClose() == false){
         delta = GetFrameTime();
@@ -50,14 +50,13 @@ int main () {
         if (IsKeyDown(KEY_D)) player.dir.x = 1;
         
         player.move(delta);
-//Planting
-
 // Bullet
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-            bullets.add(player.pos,Vector2Normalize(Vector2{(float) GetMouseX()-screenWidth/2,(float) GetMouseY()-screenHeight/2}));
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+            Vector2 facing = Vector2Normalize(Vector2Subtract(GetMousePosition(),Vector2{screenWidth/2,screenHeight/2}));
+            player.shoot(bullet_vec, facing);
         }
        
-        bullets.update(delta);
+        bullet_vec.update(delta, enemy_vec.enemies);
 
         if ( IsKeyPressed(KEY_N) ) {
             if (daytime == DAY) daytime = NIGHT;
@@ -70,20 +69,15 @@ int main () {
         if (IsKeyPressed(KEY_E)) {
             if ( daytime == DAY ) player.plant(spinach_vec);
         }
-        if (IsKeyPressed(KEY_Q)) {
-            if ( daytime == DAY ) player.pickUp(spinach_vec);
-        }
         if (IsKeyPressed(KEY_F)) {
             if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos));
         }
-
 
         player.update(delta, spinach_vec);
         enemy_vec.update(delta, spinach_vec);
         enemy_vec.move(delta);
 
         spinach_vec.update();
-
         
         camera.target = (Vector2){ player.pos.x, player.pos.y};
 
@@ -94,9 +88,9 @@ int main () {
         } else { ClearBackground(DARKBLUE);}
 
         BeginMode2D(camera);
-            DrawRectangleLines(0,0,800,600,BLUE);
+            DrawRectangleLines(0,0,1920,1080,BLUE);
             player.draw();
-            bullets.draw();
+            bullet_vec.draw();
             spinach_vec.draw();
             enemy_vec.draw();
         EndMode2D();
