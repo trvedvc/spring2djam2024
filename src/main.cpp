@@ -38,6 +38,8 @@ int main () {
     Texture2D cabin = LoadTexture("assets/Cabin.png");
 
     Texture2D slug_run = LoadTexture("assets/slugrun.png");
+    Texture2D slug_die = LoadTexture("assets/slugdie.png");
+    Texture2D slug_eat = LoadTexture("assets/slugeat.png");
 
 
     SetTargetFPS(60);
@@ -121,7 +123,7 @@ int main () {
             if (daytime == DAY) {
                 daytime = NIGHT;
                 for ( int i = 0; i < day*5*0.3; i++) {
-                    enemy_vec.add(new Enemy(randomCoordinates(),slug_run));
+                    enemy_vec.add(new Enemy(randomCoordinates(),slug_run, slug_die, slug_eat));
                 }
             }
             mosin.tint =day_tint[daytime];
@@ -183,10 +185,10 @@ int main () {
         //DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
         DrawText(TextFormat("Seeds: %i", player.seeds), 1650, 150, 50, BLACK);
         DrawText(TextFormat("Day %i", day), 1700, 100, 50, BLACK);
-        DrawText(TextFormat("Score %i", player.score), 1700, 920, 50, BLACK);
+        DrawText(TextFormat("Score %i", player.score), 1650, 920, 50, BLACK);
 
         DrawText("WASD to move!", 100, 960, 20, BLACK);
-        DrawText("ESC to quit! D:", 100, 980, 20, BLACK);
+        DrawText("ESC to quit! :C", 100, 1000, 20, BLACK);
         if (daytime == DAY) {
             DrawText("Press R when ready!", 100, 100, 50, BLACK);
             DrawText("Press E to plant!", 100, 920, 20, BLACK);
@@ -224,6 +226,8 @@ int main () {
     UnloadTexture(grass);
     UnloadTexture(cabin);
     UnloadTexture(slug_run);
+    UnloadTexture(slug_die);
+    UnloadTexture(slug_eat);
     CloseWindow();
     return 0;
 }
