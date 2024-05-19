@@ -47,10 +47,17 @@ int main () {
     
     //LOAD sounds
     Sound bg_music = LoadSound("sounds/Popeye Soundtrack.wav");
+    Sound bg_music_night = LoadSound("sounds/SlugSoundtrackNight.wav");
+
+
     Sound shot_nr = LoadSound("sounds/MosinNagantShootFXwithoutbolt.wav");
     
     Sound smoke_s = LoadSound("sounds/PopeyePipe.wav");
     Sound walk_s = LoadSound("sounds/PopeyeWalking.wav");
+    
+    Sound slug_die_s = LoadSound("sounds/SlugDeathSoundFX.wav");
+    Sound slug_eat_s = LoadSound("sounds/SlugEatingSpinach.wav");
+    Sound slug_hit_s = LoadSound("sounds/SlugHitSound.wav");
 
     SetTargetFPS(60);
 
@@ -59,9 +66,9 @@ int main () {
 
     Player player(Vector2{400,300},popeye_idle,popeye_running,shot_nr);
     
-    SpinachVec spinach_vec;
+    SpinachVec spinach_vec(slug_eat_s);
 
-    EnemyVec enemy_vec;
+    EnemyVec enemy_vec(slug_die_s,slug_hit_s);
 
     BulletVec bullet_vec;
 
@@ -81,7 +88,7 @@ int main () {
 
     Rectangle playbutton = {screenWidth/4,3*screenHeight/4,screenWidth/2,screenHeight/8};
     int playgame = 0;
-    //PlaySound(bg_music);
+    PlaySound(bg_music);
 
 
 
@@ -144,6 +151,11 @@ int main () {
         if ( IsKeyPressed(KEY_R) ) {
             if (daytime == DAY) {
                 daytime = NIGHT;
+                PauseSound(bg_music);
+                if(day==1){PlaySound(bg_music_night);}
+                else{ResumeSound(bg_music_night);}
+                
+
                 for ( int i = 0; i < day*5*0.3; i++) {
                     enemy_vec.add(new Enemy(randomCoordinates(),slug_run, slug_die, slug_eat));
                 }
@@ -157,6 +169,8 @@ int main () {
 
         if (daytime == NIGHT) {
             if (enemy_vec.enemies.empty()) {
+                PauseSound(bg_music_night);
+                ResumeSound(bg_music);
                 spinach_vec.grow();
                 daytime = DAY;
                 day++;
@@ -234,7 +248,9 @@ int main () {
             DrawText("GAME OVER", 500, 300, 100, BLACK);
             DrawText(TextFormat("SCORE: %i", player.score), 500, 650, 90, BLACK);
         }
-
+        //Restart Soundracks
+        if((daytime==DAY)&&(!IsSoundPlaying(bg_music))){PlaySound(bg_music);}
+        if((daytime==NIGHT)&&(!IsSoundPlaying(bg_music_night))){PlaySound(bg_music);}
         EndDrawing();
 
     }

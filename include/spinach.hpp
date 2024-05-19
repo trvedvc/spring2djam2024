@@ -35,8 +35,8 @@ class Spinach {
 class SpinachVec {
     public:
         vector<Spinach *> spinaches;
-        
-        SpinachVec();
+        Sound eat_s;
+        SpinachVec(Sound eat);
         ~SpinachVec();
 
         void add(Spinach * spinach);

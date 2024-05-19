@@ -64,7 +64,9 @@ void Spinach::grow() {
 
 
 // ----------------------------------------------- SpinachVec class
-SpinachVec::SpinachVec() {}
+SpinachVec::SpinachVec(Sound eat) {
+    eat_s=eat;
+}
 SpinachVec::~SpinachVec() {
     for ( Spinach * spinach : spinaches ) {
         delete spinach;

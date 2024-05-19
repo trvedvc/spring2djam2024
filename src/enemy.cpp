@@ -25,7 +25,7 @@ Enemy::Enemy(Vector2 xy, Texture2D slug_run, Texture2D slug_die, Texture2D slug_
     die = slug_die;
     is_dying = false;
     current_die_frame=0;
-    frame_die_rec = {0,0,(float)die.width/7,(float)die.height};
+    frame_die_rec = {0,0,(float)die.width/8,(float)die.height};
     shift_die_vector = Vector2{frame_die_rec.width/2,frame_die_rec.height/2};
     is_dead = false;
 
@@ -57,6 +57,7 @@ bool Enemy::update(SpinachVec &spinachVec) {
 
         if (CheckCollisionCircles(pos, 1, target->pos, 1)) {
             target->health -= 1;
+            PlaySound(spinachVec.eat_s); 
             is_eating = true;
         }
     } else {
@@ -72,23 +73,26 @@ void Enemy::move(const float &delta) {
     }
 }
 
-void Enemy::draw() {    
+void Enemy::draw(Sound die_s) {    
     frame_counter++; 
-    
+
     if (is_dying) {
         if (frame_counter >= (60/frame_speed))
         {
             frame_counter = 0;
             current_die_frame++;
-            if (current_die_frame > 11) {
+            if (current_die_frame > 7) {
                 current_die_frame = 0;
+                PlaySound(die_s);
                 is_dead = true;
             }
-            frame_die_rec.x = current_die_frame*frame_die_rec.width;
+            frame_die_rec.x = frame_die_rec.width*(8 -current_die_frame);
+            
         }
         frame_die_rec.width = abs(frame_die_rec.width);
         frame_die_rec.width *= dir.x <= 0 ? 1 : -1;  
         DrawTextureRec(die,frame_die_rec,Vector2Subtract(pos,shift_die_vector),tint);
+
     }
 
     if (is_eating) {
@@ -124,7 +128,11 @@ void Enemy::draw() {
 }
 
 // ----------------------------------------------- EnemyVec class
-EnemyVec::EnemyVec() {}
+EnemyVec::EnemyVec(Sound die, Sound hit) {
+    die_s=die;
+    hit_s=hit;
+    
+}
 EnemyVec::~EnemyVec() {
     for ( Enemy * enemy : enemies ) {
         delete enemy;
@@ -157,6 +165,6 @@ void EnemyVec::move(float &delta) {
 
 void EnemyVec::draw() {
     for ( Enemy * enemy : enemies ) {
-        enemy->draw();
+        enemy->draw(die_s);
     }
 }

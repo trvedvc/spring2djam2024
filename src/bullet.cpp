@@ -26,6 +26,7 @@ bool Bullet::update(float &delta, vector<Enemy*> &enemies){
     for ( auto it = enemies.begin(); it != enemies.end(); it++) {
         if ( CheckCollisionCircles(pos, 10, (*it)->pos, 50) ){
             (*it)->health -= 1;
+            
             (*it)->is_dying = true;
             return false;
         }

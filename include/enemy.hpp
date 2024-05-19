@@ -45,15 +45,18 @@ class Enemy {
 
         bool update(SpinachVec & spinach_vec);
         void move(const float &delta);
-        void draw();
+        void draw(Sound die_s);
 };
 
 class EnemyVec {
     public:
         vector<Enemy*> enemies;
         
+        Sound die_s;
+        Sound hit_s;
+        Sound eat_s;
 
-        EnemyVec();
+        EnemyVec(Sound die,Sound hit);
         ~EnemyVec();
         
         void add(Enemy * enemy);
