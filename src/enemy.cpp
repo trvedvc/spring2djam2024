@@ -20,7 +20,7 @@ Enemy::Enemy(Vector2 xy, Texture2D slug_run) {
     frame_rec = {0,0,(float)slug_run.width/4,(float)slug_run.height};
     frame_speed = 6;
     shift_vector = Vector2{frame_rec.width/2,frame_rec.height/2};
-    tint = WHITE;
+    tint = DARKBLUE;
 }
 
 Enemy::~Enemy() {}
@@ -66,7 +66,7 @@ void Enemy::draw() {
         frame_rec.width = abs(frame_rec.width);
         frame_rec.width *= dir.x <= 0 ? 1 : -1;  
     DrawTextureRec(run,frame_rec,Vector2Subtract(pos,shift_vector),tint);
-    DrawCircle(pos.x, pos.y, 10, RED);
+    //DrawCircle(pos.x, pos.y, 10, RED);
 }
 
 // ----------------------------------------------- EnemyVec class

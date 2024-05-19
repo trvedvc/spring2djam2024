@@ -18,6 +18,7 @@ Gun::Gun(Vector2 mid_point_passed,Texture2D gun_txt_passed,Texture2D gun_txt_dia
     radius=318;
     gun_txt=gun_txt_passed;
     gun_txt_diag=gun_txt_diag_pass;
+    tint=WHITE;
 
     texture_centre = Vector2Subtract(mid_point,Vector2Scale(texture_size,0.5));
 }
@@ -34,28 +35,28 @@ void Gun::update(Vector2 mouse_vec){
 void Gun::draw(){
     //DrawCircleV(last_point,20,RED);
     if(abs(angle)<M_PI/8){
-        DrawTextureRec(gun_txt,{0,280,236,80},{texture_centre.x,texture_centre.y+280},WHITE);
+        DrawTextureRec(gun_txt,{0,280,236,80},{texture_centre.x,texture_centre.y+280},tint);
     }
     else if((angle>3*M_PI/8)&&(angle<5*M_PI/8)){
-        DrawTextureRec(gun_txt,{280,410,55,216},{texture_centre.x+280,texture_centre.y+410},WHITE);
+        DrawTextureRec(gun_txt,{280,410,55,216},{texture_centre.x+280,texture_centre.y+410},tint);
     }
     else if(abs(angle)>7*M_PI/8){
-        DrawTextureRec(gun_txt,{400,280,236,80},{texture_centre.x+400,texture_centre.y+280},WHITE); 
+        DrawTextureRec(gun_txt,{400,280,236,80},{texture_centre.x+400,texture_centre.y+280},tint); 
     }
     else if((angle<-3*M_PI/8)&&(angle>-5*M_PI/8)){
-        DrawTextureRec(gun_txt,{280,0,55,216},{texture_centre.x+280,texture_centre.y},WHITE);   
+        DrawTextureRec(gun_txt,{280,0,55,216},{texture_centre.x+280,texture_centre.y},tint);   
     }
     else if((angle<-5*M_PI/8)&&(angle>-7*M_PI/8)){
-        DrawTextureRec(gun_txt,{367,30,219,220},{texture_centre.x+367,texture_centre.y+30},WHITE);  
+        DrawTextureRec(gun_txt,{367,30,219,220},{texture_centre.x+367,texture_centre.y+30},tint);  
     }
     else if((angle>5*M_PI/8)&&(angle<7*M_PI/8)){
-        DrawTextureRec(gun_txt,{380,370,220,210},{texture_centre.x+380,texture_centre.y+370},WHITE);  
+        DrawTextureRec(gun_txt,{380,370,220,210},{texture_centre.x+380,texture_centre.y+370},tint);  
     }
     else if((angle>M_PI/8)&&(angle<3*M_PI/8)){
-        DrawTextureRec(gun_txt,{40,380,220,210},{texture_centre.x+40,texture_centre.y+380},WHITE);  
+        DrawTextureRec(gun_txt,{40,380,220,210},{texture_centre.x+40,texture_centre.y+380},tint);  
     }
     else if((angle<-M_PI/8)&&(angle>-3*M_PI/8)){
-        DrawTextureRec(gun_txt,{50,30,220,210},{texture_centre.x+50,texture_centre.y+30},WHITE);  
+        DrawTextureRec(gun_txt,{50,30,220,210},{texture_centre.x+50,texture_centre.y+30},tint);  
     }
 
 

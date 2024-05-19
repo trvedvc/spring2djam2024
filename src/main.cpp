@@ -125,8 +125,8 @@ int main () {
                 }
             } else {
                 daytime = DAY;
-                spinach_vec.grow();
             }
+            mosin.tint =day_tint[daytime];
             player.tint = day_tint[daytime];
             for ( Spinach * spinach : spinach_vec.spinaches) {
                 spinach->tint = day_tint[daytime];
@@ -135,17 +135,19 @@ int main () {
 
         if (daytime == NIGHT) {
             if (enemy_vec.enemies.empty()) {
+                spinach_vec.grow();
                 daytime = DAY;
                 day++;
             } 
             player.tint = day_tint[daytime];
+            mosin.tint =day_tint[daytime];
             for ( Spinach * spinach : spinach_vec.spinaches) {
                 spinach->tint = day_tint[daytime];
             }
         }
 
         player.update(delta, spinach_vec);\
-        
+
         enemy_vec.update(delta, spinach_vec);
         enemy_vec.move(delta);
 

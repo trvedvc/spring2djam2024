@@ -24,6 +24,7 @@ public:
     Texture2D gun_txt_diag;
     Vector2 texture_size;
     Vector2 texture_centre;
+    Color tint;
 
 
 
