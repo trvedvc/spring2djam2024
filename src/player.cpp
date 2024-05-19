@@ -20,6 +20,7 @@ Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed,Sound sho
     reload_time = 1;
     reload = reload_time;
     can_shoot = true;
+    score = 0;
 
     frame_counter=0;
     current_frame_idle=0;
@@ -56,6 +57,8 @@ void Player::update(float &delta, SpinachVec &spinach_vec) {
     for ( Spinach * spinach : spinach_vec.spinaches ) {
         if ( CheckCollisionCircles(pos, 50, spinach->pos, 50) && spinach->phase == 2) {
             spinach->picked = true;
+            seeds += rand() % 2 + 1;
+            score++;
         }
     }
 

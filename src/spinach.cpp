@@ -48,7 +48,6 @@ void Spinach::draw() {
             if (cur_frame > 4) {
                 is_growing = false;
                 cur_frame = 0;
-                cout << endl;
             }
         }
     }

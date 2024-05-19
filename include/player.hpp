@@ -15,6 +15,7 @@ class Player {
         float speed;
         Vector2 dir;
         
+        int score;
 
         int dmg;
         float reload_time;
