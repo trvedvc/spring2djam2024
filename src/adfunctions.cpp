@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <math.h>
 
+using namespace std;
 
  bool didClick (Rectangle rec){
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
@@ -30,4 +31,14 @@ Vector2 nearTile(Vector2 original, int size){
     retvec.x=round(retvec.x);
     retvec.y=round(retvec.y);
     return retvec;
+}
+
+Vector2 randomCoordinates(){
+    Vector2 vec;
+    int r = 1920;
+    float alpha = rand() % 361;
+    vec.x = r*cos(alpha*PI/180);
+    vec.y = r*sin(alpha*PI/180);
+    cout << alpha << ' ' << vec.x << ' '<< vec.y<< endl;
+    return vec;
 }

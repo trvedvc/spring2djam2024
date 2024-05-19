@@ -30,6 +30,7 @@ Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed) {
     frame_rec_running={0,0,132,160};
     frame_speed = 6;
     shift_vector = Vector2{frame_rec_idle.width/2,-frame_rec_idle.height/2};
+    tint = WHITE;
 
     money = 0;
 
@@ -51,7 +52,7 @@ void Player::update(float &delta, SpinachVec &spinach_vec) {
     }
 
     for ( Spinach * spinach : spinach_vec.spinaches ) {
-        if ( CheckCollisionCircles(pos, 10, spinach->pos, 10) && spinach->state == 1) {
+        if ( CheckCollisionCircles(pos, 50, spinach->pos, 50) && spinach->phase == 2) {
             spinach->picked = true;
         }
     }
@@ -64,11 +65,16 @@ void Player::update(float &delta, SpinachVec &spinach_vec) {
 }
 
 void Player::move(const float &delta) {
-    dir = Vector2Normalize(dir);
-    pos = Vector2Add(pos, Vector2Scale(dir,speed*delta));
-}
-void Player::changeDir(){
-    //frame_rec_idle.width=-frame_rec_idle.width;
+    //cout << pos.x << ' ' << pos.y << endl;
+    if (CheckCollisionPointRec(pos,{-1920, -1080, 2*1920, 2*1080})) {
+        dir = Vector2Normalize(dir);
+        pos = Vector2Add(pos, Vector2Scale(dir,speed*delta));
+    } else {
+        if (pos.x <= -1920) { pos.x = -1919;}
+        if (pos.x >= 1920) { pos.x = 1919;}
+        if (pos.y <= -1080) { pos.y = -1079;}
+        if (pos.y >= 1080) { pos.y = 1079;}
+    }
 }
 void Player::draw() {
     frame_counter++;
@@ -90,7 +96,7 @@ void Player::draw() {
             frame_rec_running.width=-132;
         }
 
-        DrawTextureRec(running,frame_rec_running,Vector2Add(pos,shift_vector),WHITE);
+        DrawTextureRec(running,frame_rec_running,Vector2Add(pos,shift_vector),tint);
         }
     else{
         if(frame_rec_running.width>0){
@@ -99,11 +105,11 @@ void Player::draw() {
         else{
             frame_rec_idle.width=-164;
         }
-        DrawTextureRec(idle,frame_rec_idle,Vector2Add(pos,shift_vector),WHITE);
+        DrawTextureRec(idle,frame_rec_idle,Vector2Add(pos,shift_vector),tint);
         }
 }
 
-void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {
+void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos, Texture2D spinach_texture) {
     if (can_plant && seeds > 0) {
         bool spaceforplant = true;
         for ( Spinach * spinach : spinach_vec.spinaches ) {
@@ -111,7 +117,7 @@ void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {
                 {spaceforplant=false;}
             }
             if(spaceforplant){
-                spinach_vec.add(new Spinach(plantpos));
+                spinach_vec.add(new Spinach(plantpos, spinach_texture));
                 can_plant = false;
                 remaining_plant_CD = plant_CD;
                 seeds -= 1;

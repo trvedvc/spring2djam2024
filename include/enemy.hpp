@@ -15,9 +15,18 @@ class Enemy {
 
         int health;
 
+        int frame_counter;
+        Texture2D run;
+        Rectangle frame_rec;
+        int frame_speed;
+        int current_frame;
+        Vector2 shift_vector;
+        int facing;
+        Color tint;
+
         Spinach * target;
 
-        Enemy(Vector2 xy);
+        Enemy(Vector2 xy, Texture2D slug_run);
         ~Enemy();
 
         bool update(SpinachVec & spinach_vec);

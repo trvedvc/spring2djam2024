@@ -12,10 +12,19 @@ class Spinach {
         Vector2 pos;
         float health;
         Rectangle rec;
-        int state;
         bool picked;
 
-        Spinach(Vector2 xy);
+        int phase;
+
+        Texture2D texture;
+        int cur_frame;
+        Rectangle frame_rec;
+        int frame_counter;
+        int frame_speed;
+        bool is_growing;
+        Color tint;
+
+        Spinach(Vector2 xy, Texture2D spinach_texture);
         ~Spinach();
 
         void draw();

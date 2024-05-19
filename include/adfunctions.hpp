@@ -6,4 +6,5 @@
 
 bool didClick (Rectangle rec);
 Vector2 nearTile(Vector2 original, int size);
+Vector2 randomCoordinates();
 #endif 
