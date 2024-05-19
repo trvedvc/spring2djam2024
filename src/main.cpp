@@ -52,10 +52,15 @@ int main () {
     Sound smoke_s = LoadSound("sounds/PopeyePipe.wav");
     Sound walk_s = LoadSound("sounds/PopeyeWalking.wav");
 
+    Texture2D pepek = LoadTexture("assets/pepek.png");
+    Texture2D credits = LoadTexture("assets/credits");
+
     SetTargetFPS(60);
 
     float delta;
     int day = 1;
+    bool game_over = false;
+    bool show_credits = false;
 
     Player player(Vector2{400,300},popeye_idle,popeye_running,shot_nr);
     
@@ -88,12 +93,16 @@ int main () {
     while (WindowShouldClose() == false){
         
         if(playgame==0){   
-            while(! didClick(playbutton)){
+            //while(! didClick(playbutton)){
+            while(! IsKeyPressed(KEY_F)){
 
                 BeginDrawing();
-                    ClearBackground(BLUE);
-                    DrawRectangleRounded(playbutton,0.5,4,BLACK);
-                    DrawTexture(settxt,150,150,WHITE); 
+                    ClearBackground(DARKGREEN);
+                    DrawTexture(pepek, 0,0, WHITE);
+                    DrawText("Press F to play", 600, 800, 100, WHITE);
+
+                    //DrawRectangleRounded(playbutton,0.5,4,BLACK);
+                    //DrawTexture(settxt,150,150,WHITE); 
                 EndDrawing();
             
                 WaitTime(0.1);
@@ -136,11 +145,13 @@ int main () {
         if (IsKeyPressed(KEY_E)) {
             if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,32), spinach_texture);
         }
+
         if (IsKeyPressed(KEY_F)) {
-            randomCoordinates();
-            cout << player.pos.x <<' '<< player.pos.y<< endl;
-            //if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos, slug_run));
+            if (game_over) {
+                show_credits = true;
+            }
         }
+
         if ( IsKeyPressed(KEY_R) ) {
             if (daytime == DAY) {
                 daytime = NIGHT;
@@ -205,34 +216,40 @@ int main () {
         mosin.draw();
 
         //DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
-        DrawText(TextFormat("Seeds: %i", player.seeds), 1650, 150, 50, BLACK);
-        DrawText(TextFormat("Day %i", day), 1700, 100, 50, BLACK);
-        DrawText(TextFormat("Score %i", player.score), 1650, 920, 50, BLACK);
+        DrawText(TextFormat("Seeds: %i", player.seeds), 1650, 150, 50, WHITE);
+        DrawText(TextFormat("Day %i", day), 1700, 100, 50, WHITE);
+        DrawText(TextFormat("Score %i", player.score), 1650, 920, 50, WHITE);
 
-        DrawText("WASD to move!", 100, 960, 20, BLACK);
-        DrawText("ESC to quit! :C", 100, 1000, 20, BLACK);
+        DrawText("WASD to move!", 100, 960, 20, WHITE);
+        DrawText("ESC to quit! :C", 100, 1000, 20, WHITE);
         if (daytime == DAY) {
-            DrawText("Press R when ready!", 100, 100, 50, BLACK);
-            DrawText("Press E to plant!", 100, 920, 20, BLACK);
+            DrawText("Press R when ready!", 100, 100, 50, WHITE);
+            DrawText("Press E to plant!", 100, 920, 20, WHITE);
 
             if (day == 1) {
-                DrawText("Press E to plant!", 100, 200, 50, BLACK);
+                DrawText("Press E to plant!", 100, 200, 50, WHITE);
             }
             if (day == 2) {
-                DrawText("Spinach is ready to harvest after 2 days!", 100, 200, 40, BLACK);
+                DrawText("Spinach is ready to harvest after 2 days!", 100, 200, 40, WHITE);
             }
             if (day == 3) {
-                DrawText("On spinach harvest, you get 1 or 2 seeds!", 100, 200, 40, BLACK);
+                DrawText("On spinach harvest, you get 1 or 2 seeds!", 100, 200, 40, WHITE);
             }
         }else{
-            DrawText("Mouse Click to shoot!", 100, 920, 20, BLACK);
-            DrawText("Protect your spinach from slugs!", 100, 100, 50, BLACK);
+            DrawText("Left Click to shoot!", 100, 920, 20, WHITE);
+            DrawText("Protect your spinach from slugs!", 100, 100, 50, WHITE);
 
         }
 
         if ( player.seeds == 0 && spinach_vec.spinaches.empty()) {
-            DrawText("GAME OVER", 500, 300, 100, BLACK);
-            DrawText(TextFormat("SCORE: %i", player.score), 500, 650, 90, BLACK);
+            game_over = true;
+            DrawText("GAME OVER", 500, 300, 100, WHITE);
+            DrawText(TextFormat("SCORE: %i", player.score), 500, 650, 90, WHITE);
+            DrawText("Press F to continue", 600, 800, 100, WHITE);
+        }
+
+        if (show_credits) {
+            DrawTexture(credits, 0, 0, WHITE);
         }
 
         EndDrawing();
@@ -250,6 +267,8 @@ int main () {
     UnloadTexture(slug_run);
     UnloadTexture(slug_die);
     UnloadTexture(slug_eat);
+    UnloadTexture(pepek);
+    UnloadTexture(credits);
     CloseWindow();
     return 0;
 }

@@ -25,7 +25,7 @@ Enemy::Enemy(Vector2 xy, Texture2D slug_run, Texture2D slug_die, Texture2D slug_
     die = slug_die;
     is_dying = false;
     current_die_frame=0;
-    frame_die_rec = {0,0,(float)die.width/7,(float)die.height};
+    frame_die_rec = {0,0,(float)die.width/8,(float)die.height};
     shift_die_vector = Vector2{frame_die_rec.width/2,frame_die_rec.height/2};
     is_dead = false;
 
