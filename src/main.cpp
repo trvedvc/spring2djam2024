@@ -37,6 +37,7 @@ int main () {
     SetTargetFPS(60);
 
     float delta;
+    int day = 1;
 
     Player player(Vector2{400,300},popeye_idle,popeye_running);
     
@@ -100,16 +101,31 @@ int main () {
             if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,32), spinach_texture);
         }
         if (IsKeyPressed(KEY_F)) {
-            if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos, slug_run));
+            randomCoordinates();
+            cout << player.pos.x <<' '<< player.pos.y<< endl;
+            //if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos, slug_run));
         }
-        if ( IsKeyPressed(KEY_N) ) {
+        if ( IsKeyPressed(KEY_R) ) {
             if (daytime == DAY) {
                 daytime = NIGHT;
+                for ( int i = 0; i < day*5*0.3; i++) {
+                    enemy_vec.add(new Enemy(randomCoordinates(),slug_run));
+                }
             } else {
                 daytime = DAY;
                 spinach_vec.grow();
-                
             }
+            player.tint = day_tint[daytime];
+            for ( Spinach * spinach : spinach_vec.spinaches) {
+                spinach->tint = day_tint[daytime];
+            }
+        }
+
+        if (daytime == NIGHT) {
+            if (enemy_vec.enemies.empty()) {
+                daytime = DAY;
+                day++;
+            } 
             player.tint = day_tint[daytime];
             for ( Spinach * spinach : spinach_vec.spinaches) {
                 spinach->tint = day_tint[daytime];
@@ -156,6 +172,16 @@ int main () {
         DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
         DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
 
+        if (daytime == DAY) {
+            DrawText("Press R when ready!", 100, 100, 50, BLACK);
+            DrawText("Press E to plant!", 100, 920, 20, BLACK);
+            DrawText("WASD to move!", 100, 960, 20, BLACK);
+            DrawText(TextFormat("Day %i", day), 1800, 100, 40, BLACK);
+
+        }else{
+            DrawText("Mouse Click to shoot!", 100, 1000, 20, BLACK);
+            DrawText("Protect your spinach from slugs!", 100, 100, 50, BLACK);
+        }
         EndDrawing();
         }
 

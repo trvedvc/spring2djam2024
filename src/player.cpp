@@ -61,7 +61,7 @@ void Player::update(float &delta, SpinachVec &spinach_vec) {
 }
 
 void Player::move(const float &delta) {
-    cout << pos.x << ' ' << pos.y << endl;
+    //cout << pos.x << ' ' << pos.y << endl;
     if (CheckCollisionPointRec(pos,{-1920, -1080, 2*1920, 2*1080})) {
         dir = Vector2Normalize(dir);
         pos = Vector2Add(pos, Vector2Scale(dir,speed*delta));

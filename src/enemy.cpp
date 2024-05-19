@@ -63,8 +63,6 @@ void Enemy::draw() {
             if (current_frame > 3) current_frame = 0;
             frame_rec.x = current_frame*frame_rec.width;
         }
-        //facing = dir.x > 0 ? 1 : -1;
-        cout << dir.x << endl;
         frame_rec.width = abs(frame_rec.width);
         frame_rec.width *= dir.x <= 0 ? 1 : -1;  
     DrawTextureRec(run,frame_rec,Vector2Subtract(pos,shift_vector),tint);
