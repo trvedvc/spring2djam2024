@@ -26,6 +26,7 @@ Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed) {
     frame_rec = {0,0,164,160};
     frame_speed = 6;
     shift_vector = Vector2{frame_rec.width/2,frame_rec.height/2};
+    tint = WHITE;
 
     money = 0;
 
@@ -47,7 +48,7 @@ void Player::update(float &delta, SpinachVec &spinach_vec) {
     }
 
     for ( Spinach * spinach : spinach_vec.spinaches ) {
-        if ( CheckCollisionCircles(pos, 10, spinach->pos, 10) && spinach->state == 1) {
+        if ( CheckCollisionCircles(pos, 50, spinach->pos, 50) && spinach->phase == 2) {
             spinach->picked = true;
         }
     }
@@ -73,10 +74,10 @@ void Player::draw() {
             if (current_frame > 4) current_frame = 0;
             frame_rec.x = current_frame*frame_rec.width;
         }
-    DrawTextureRec(idle,frame_rec,Vector2Subtract(pos,shift_vector),WHITE);
+    DrawTextureRec(idle,frame_rec,Vector2Subtract(pos,shift_vector),tint);
 }
 
-void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {
+void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos, Texture2D spinach_texture) {
     if (can_plant && seeds > 0) {
         bool spaceforplant = true;
         for ( Spinach * spinach : spinach_vec.spinaches ) {
@@ -84,7 +85,7 @@ void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {
                 {spaceforplant=false;}
             }
             if(spaceforplant){
-                spinach_vec.add(new Spinach(plantpos));
+                spinach_vec.add(new Spinach(plantpos, spinach_texture));
                 can_plant = false;
                 remaining_plant_CD = plant_CD;
                 seeds -= 1;

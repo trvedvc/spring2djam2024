@@ -14,6 +14,7 @@ using namespace std;
 #define DAY 0
 #define NIGHT 1
 
+
 int main () {
        
 
@@ -25,9 +26,14 @@ int main () {
     Texture2D settxt= LoadTexture("assets/settings.png");
     Texture2D popeye_idle = LoadTexture("assets/Player/PlayerIdleexport.png");
     Texture2D popeye_running = LoadTexture("assets/Player/PlayerRunningexport.png");
-    SetTargetFPS(60);
 
-     
+    Texture2D spinach_texture = LoadTexture("assets/Spinach/spinach.png");
+    Texture2D grass = LoadTexture("assets/Grass.png");
+    Texture2D trees = LoadTexture("assets/Trees.png");
+    Texture2D cabin = LoadTexture("assets/Cabin.png");
+
+
+    SetTargetFPS(60);
 
     float delta;
 
@@ -46,14 +52,11 @@ int main () {
     camera.zoom = 1.0f;
 
     int daytime = DAY;
+    vector<Color> day_tint = {WHITE, DARKBLUE};
     // Initial Menu
 
     Rectangle playbutton = {screenWidth/4,3*screenHeight/4,screenWidth/2,screenHeight/8};
     int playgame = 0;
-
-
-
-
 
     while (WindowShouldClose() == false){
         
@@ -72,7 +75,6 @@ int main () {
             playgame=1;
         }
         
-
 // Bullet
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
             Vector2 facing = Vector2Normalize(Vector2Subtract(GetMousePosition(),Vector2{screenWidth/2,screenHeight/2}));
@@ -94,16 +96,22 @@ int main () {
     //Planting
 
         if (IsKeyPressed(KEY_E)) {
-            if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,32));
+            if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,32), spinach_texture);
         }
         if (IsKeyPressed(KEY_F)) {
             if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos));
         }
         if ( IsKeyPressed(KEY_N) ) {
-            if (daytime == DAY) daytime = NIGHT;
-            else {
+            if (daytime == DAY) {
+                daytime = NIGHT;
+            } else {
                 daytime = DAY;
                 spinach_vec.grow();
+                
+            }
+            player.tint = day_tint[daytime];
+            for ( Spinach * spinach : spinach_vec.spinaches) {
+                spinach->tint = day_tint[daytime];
             }
         }
 
@@ -112,9 +120,32 @@ int main () {
         enemy_vec.move(delta);
 
         spinach_vec.update();
+
+        player.update(delta, spinach_vec);
+        enemy_vec.update(delta, spinach_vec);
+        enemy_vec.move(delta);
+
+        spinach_vec.update();
+
         
+        camera.target = (Vector2){ player.pos.x, player.pos.y};
+
+// draw
+        BeginDrawing();
+        if ( daytime == DAY) {
+            ClearBackground(DARKGREEN);
+        } else { ClearBackground(DARKBLUE);}
+
         BeginMode2D(camera);
-            DrawRectangleLines(0,0,1920,1080,BLUE);
+            for (int i = -1; i < 1; i++) {
+                for (int j = -1; j < 1; j++) {
+                    DrawTexture(grass, i*1920, j*1080, day_tint[daytime]);
+                }
+            }
+            //DrawTexture(trees, 0, 0, day_tint[daytime]);
+            DrawTexture(cabin, 0, 0, day_tint[daytime]);
+
+            //DrawRectangleLines(0,0,800,600,BLUE);
             player.draw();
             bullet_vec.draw();
             spinach_vec.draw();
@@ -125,41 +156,15 @@ int main () {
         DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
 
 
-            player.update(delta, spinach_vec);
-            enemy_vec.update(delta, spinach_vec);
-            enemy_vec.move(delta);
+        EndDrawing();
+        }
 
-            spinach_vec.update();
-
-            
-            camera.target = (Vector2){ player.pos.x, player.pos.y};
-
-    // draw
-            BeginDrawing();
-            if ( daytime == DAY) {
-                ClearBackground(YELLOW);
-            } else { ClearBackground(DARKBLUE);}
-
-            BeginMode2D(camera);
-                DrawRectangleLines(0,0,800,600,BLUE);
-                player.draw();
-                bullet_vec.draw();
-                spinach_vec.draw();
-                enemy_vec.draw();
-            EndMode2D();
-
-            DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
-            DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
-
-
-            EndDrawing();
-            }
-    
     
 
     UnloadTexture(settxt);
     UnloadTexture(popeye_idle);
     UnloadTexture(popeye_running);
+    UnloadTexture(spinach_texture);
     CloseWindow();
     return 0;
 }

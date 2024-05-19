@@ -25,6 +25,7 @@ class Player {
         int frame_speed;
         int current_frame;
         Vector2 shift_vector;
+        Color tint;
 
         int money;
 
@@ -39,7 +40,7 @@ class Player {
         void update(float &delta, SpinachVec & spinach_vec);
         void move(const float &delta);
         void draw();
-        void plant(SpinachVec &spinachVec,Vector2 plantpos);
+        void plant(SpinachVec &spinachVec,Vector2 plantpos, Texture2D spinach_texture);
         void shoot(BulletVec &bullet_vec, Vector2 &facing);
 };
 
