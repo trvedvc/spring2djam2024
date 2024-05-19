@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed) {
+Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed,Sound shot_s_pass) {
     pos = xy;
     speed = 250;
     dir = {0,0};
@@ -31,6 +31,8 @@ Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed) {
     frame_speed = 6;
     shift_vector = Vector2{frame_rec_idle.width/2,-frame_rec_idle.height/2};
     tint = WHITE;
+
+    shot_s_nr=shot_s_pass;
 
     money = 0;
 
@@ -162,7 +164,10 @@ void Player::shoot(BulletVec &bullet_vec, Vector2 &facing,Gun gun) {
             shot_dir =Vector2Normalize({-1,-1});
         }
 
+        PlaySound(shot_s_nr);
+
         bullet_vec.add(muzzle,shot_dir);
+
         can_shoot = false;
         reload = reload_time;
     } 

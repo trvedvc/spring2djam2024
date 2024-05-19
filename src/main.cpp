@@ -12,6 +12,7 @@
 #include "../include/gun.hpp"
 
 
+
 using namespace std;
 
 #define DAY 0
@@ -24,6 +25,8 @@ int main () {
     const int screenWidth = 1920;
     const int screenHeight = 1080;
     const Vector2 mid_point = {screenWidth/2,screenHeight/2};
+
+    InitAudioDevice();    
 
     InitWindow(screenWidth, screenHeight, "title");
     //LOAD TEXTURES
@@ -38,14 +41,19 @@ int main () {
     Texture2D cabin = LoadTexture("assets/Cabin.png");
 
     Texture2D slug_run = LoadTexture("assets/slugrun.png");
+    //LOAD sounds
+    Sound bg_music = LoadSound("sounds/Popeye Soundtrack.wav");
+    Sound shot_nr = LoadSound("sounds/MosinNagantShootFXwithoutbolt.wav");
 
+    Sound smoke_s = LoadSound("sounds/PopeyePipe.wav");
+    Sound walk_s = LoadSound("sounds/PopeyeWalking.wav");
 
     SetTargetFPS(60);
 
     float delta;
     int day = 1;
 
-    Player player(Vector2{400,300},popeye_idle,popeye_running);
+    Player player(Vector2{400,300},popeye_idle,popeye_running,shot_nr);
     
     SpinachVec spinach_vec;
 
@@ -69,6 +77,9 @@ int main () {
 
     Rectangle playbutton = {screenWidth/4,3*screenHeight/4,screenWidth/2,screenHeight/8};
     int playgame = 0;
+    //PlaySound(bg_music);
+
+
 
     while (WindowShouldClose() == false){
         
@@ -91,6 +102,7 @@ int main () {
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
             facing = Vector2Normalize(Vector2Subtract(GetMousePosition(),Vector2{screenWidth/2,screenHeight/2}));
             player.shoot(bullet_vec, facing,mosin);
+            
         }
        
         bullet_vec.update(delta, enemy_vec.enemies);
@@ -106,6 +118,14 @@ int main () {
             if (IsKeyDown(KEY_D)) player.dir.x = 1;
 
             player.move(delta);
+
+            if (Vector2Length(player.dir)>0 && (!IsSoundPlaying(walk_s))){
+                PauseSound(smoke_s);
+                PlaySound(walk_s);
+            }
+            else if(!IsSoundPlaying(smoke_s)&&Vector2Length(player.dir)==0){
+                PlaySound(smoke_s);
+            }
 
     //Planting
 

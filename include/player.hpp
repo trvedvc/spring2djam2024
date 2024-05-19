@@ -32,6 +32,8 @@ class Player {
         Vector2 shift_vector;
         Color tint;
 
+        Sound shot_s_nr;
+
         int money;
 
         int seeds;
@@ -39,7 +41,7 @@ class Player {
         float remaining_plant_CD;
         bool can_plant;
 
-        Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed);
+        Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed,Sound shot_s_pass);
         ~Player();
 
         void update(float &delta, SpinachVec & spinach_vec);

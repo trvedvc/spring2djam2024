@@ -17,7 +17,8 @@ Bullet::Bullet(Vector2 xy,Vector2 facing){
 }
 
 void Bullet::draw(){
-    DrawCircle(pos.x, pos.y, 10, BLUE);
+    DrawCircleV(pos, 10,Fade(YELLOW,0.64));
+    DrawCircleLinesV(pos, 10,BLACK);
 }
 
 bool Bullet::update(float &delta, vector<Enemy*> &enemies){
