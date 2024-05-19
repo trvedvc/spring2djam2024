@@ -29,8 +29,9 @@ int main () {
 
     Texture2D spinach_texture = LoadTexture("assets/Spinach/spinach.png");
     Texture2D grass = LoadTexture("assets/Grass.png");
-    Texture2D trees = LoadTexture("assets/Trees.png");
     Texture2D cabin = LoadTexture("assets/Cabin.png");
+
+    Texture2D slug_run = LoadTexture("assets/slugrun.png");
 
 
     SetTargetFPS(60);
@@ -99,7 +100,7 @@ int main () {
             if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,32), spinach_texture);
         }
         if (IsKeyPressed(KEY_F)) {
-            if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos));
+            if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos, slug_run));
         }
         if ( IsKeyPressed(KEY_N) ) {
             if (daytime == DAY) {
@@ -155,7 +156,6 @@ int main () {
         DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
         DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
 
-
         EndDrawing();
         }
 
@@ -165,6 +165,9 @@ int main () {
     UnloadTexture(popeye_idle);
     UnloadTexture(popeye_running);
     UnloadTexture(spinach_texture);
+    UnloadTexture(grass);
+    UnloadTexture(cabin);
+    UnloadTexture(slug_run);
     CloseWindow();
     return 0;
 }
