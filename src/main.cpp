@@ -1,12 +1,15 @@
 #include <iostream>
 #include <raylib.h>
 #include "raymath.h"
+#include <stdio.h>
+#include <math.h>
 
 #include "../include/player.hpp"
 #include "../include/spinach.hpp"
 #include "../include/bullet.hpp"
 #include "../include/enemy.hpp"
 #include "../include/adfunctions.hpp"
+#include "../include/gun.hpp"
 
 
 using namespace std;
@@ -19,12 +22,17 @@ int main () {
 
     const int screenWidth = 1920;
     const int screenHeight = 1080;
+    const Vector2 mid_point = {screenWidth/2,screenHeight/2};
 
     InitWindow(screenWidth, screenHeight, "title");
     //LOAD TEXTURES
     Texture2D settxt= LoadTexture("assets/settings.png");
     Texture2D popeye_idle = LoadTexture("assets/Player/PlayerIdleexport.png");
     Texture2D popeye_running = LoadTexture("assets/Player/PlayerRunningexport.png");
+    Texture2D gun_txt = LoadTexture("assets/Player/WWIIRifleexport.png");
+    Texture2D gun_txt_diag = LoadTexture("assets/Player/WWIIriflediag.png");
+
+
     SetTargetFPS(60);
 
      
@@ -39,6 +47,8 @@ int main () {
 
     BulletVec bullet_vec;
 
+    Gun mosin(mid_point,gun_txt,gun_txt_diag);
+
     Camera2D camera = {0};
     camera.target = (Vector2){ player.pos.x, player.pos.y};
     camera.offset = (Vector2){ screenWidth/2.0f, screenHeight/2.0f };
@@ -48,10 +58,10 @@ int main () {
     int daytime = DAY;
     // Initial Menu
 
+    Vector2 facing;
+
     Rectangle playbutton = {screenWidth/4,3*screenHeight/4,screenWidth/2,screenHeight/8};
     int playgame = 0;
-
-
 
 
 
@@ -67,7 +77,7 @@ int main () {
                 EndDrawing();
             
                 WaitTime(0.1);
-                cout<<GetMouseX()<<' '<<GetMouseY()<<' '<<playbutton.x<<' '<<playbutton.y<<endl;
+               
             }
             playgame=1;
         }
@@ -75,8 +85,8 @@ int main () {
 
 // Bullet
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-            Vector2 facing = Vector2Normalize(Vector2Subtract(GetMousePosition(),Vector2{screenWidth/2,screenHeight/2}));
-            player.shoot(bullet_vec, facing);
+            facing = Vector2Normalize(Vector2Subtract(GetMousePosition(),Vector2{screenWidth/2,screenHeight/2}));
+            player.shoot(bullet_vec, facing,mosin);
         }
        
         bullet_vec.update(delta, enemy_vec.enemies);
@@ -85,16 +95,18 @@ int main () {
     // logic
     //Player movement
             player.dir = Vector2{0,0};
+
             if (IsKeyDown(KEY_W)) player.dir.y = -1;
             if (IsKeyDown(KEY_A)) player.dir.x = -1;
             if (IsKeyDown(KEY_S)) player.dir.y = 1;
             if (IsKeyDown(KEY_D)) player.dir.x = 1;
-            
+
             player.move(delta);
+
     //Planting
 
         if (IsKeyPressed(KEY_E)) {
-            if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,32));
+            if ( daytime == DAY ) player.plant(spinach_vec,nearTile(player.pos,64));
         }
         if (IsKeyPressed(KEY_F)) {
             if ( daytime == NIGHT ) enemy_vec.add(new Enemy(player.pos));
@@ -111,27 +123,15 @@ int main () {
         enemy_vec.update(delta, spinach_vec);
         enemy_vec.move(delta);
 
-        spinach_vec.update();
-        
-        BeginMode2D(camera);
-            DrawRectangleLines(0,0,1920,1080,BLUE);
-            player.draw();
-            bullet_vec.draw();
-            spinach_vec.draw();
-            enemy_vec.draw();
-        EndMode2D();
+            spinach_vec.update();
 
-        DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
-        DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
-
+            mosin.update(GetMousePosition());
 
             player.update(delta, spinach_vec);
             enemy_vec.update(delta, spinach_vec);
             enemy_vec.move(delta);
 
-            spinach_vec.update();
-
-            
+            spinach_vec.update();  
             camera.target = (Vector2){ player.pos.x, player.pos.y};
 
     // draw
@@ -147,7 +147,7 @@ int main () {
                 spinach_vec.draw();
                 enemy_vec.draw();
             EndMode2D();
-
+            mosin.draw();
             DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
             DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
 
@@ -160,6 +160,7 @@ int main () {
     UnloadTexture(settxt);
     UnloadTexture(popeye_idle);
     UnloadTexture(popeye_running);
+    UnloadTexture(gun_txt);
     CloseWindow();
     return 0;
 }

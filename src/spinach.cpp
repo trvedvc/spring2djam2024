@@ -9,7 +9,7 @@ using namespace std;
 
 #define GROWING 0
 #define GROWN 1
-#define SIZE 32
+#define SIZE 64
 
 vector<Color> colors = {LIME, GREEN};
 

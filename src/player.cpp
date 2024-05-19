@@ -6,6 +6,8 @@
 
 #include "../include/player.hpp"
 #include "../include/bullet.hpp"
+#include "../include/gun.hpp"
+#define M_PI 3.14159265358979323846
 
 using namespace std;
 
@@ -20,12 +22,14 @@ Player::Player(Vector2 xy,Texture2D idlePassed,Texture2D runningPassed) {
     can_shoot = true;
 
     frame_counter=0;
-    current_frame=0;
+    current_frame_idle=0;
+    current_frame_running=0;
     idle=idlePassed;
     running=runningPassed;
-    frame_rec = {0,0,164,160};
+    frame_rec_idle = {0,0,-164,160};
+    frame_rec_running={0,0,132,160};
     frame_speed = 6;
-    shift_vector = Vector2{frame_rec.width/2,frame_rec.height/2};
+    shift_vector = Vector2{frame_rec_idle.width/2,-frame_rec_idle.height/2};
 
     money = 0;
 
@@ -63,17 +67,40 @@ void Player::move(const float &delta) {
     dir = Vector2Normalize(dir);
     pos = Vector2Add(pos, Vector2Scale(dir,speed*delta));
 }
-
+void Player::changeDir(){
+    //frame_rec_idle.width=-frame_rec_idle.width;
+}
 void Player::draw() {
     frame_counter++;
      if (frame_counter >= (60/frame_speed))
         {
             frame_counter = 0;
-            current_frame++;
-            if (current_frame > 4) current_frame = 0;
-            frame_rec.x = current_frame*frame_rec.width;
+            current_frame_idle++;
+            current_frame_running++;
+            if (current_frame_idle > 4) {current_frame_idle = 0;}
+            if (current_frame_running>5) {current_frame_running=0;}
+            frame_rec_idle.x = current_frame_idle*frame_rec_idle.width;
+            frame_rec_running.x = current_frame_idle*frame_rec_running.width;
         }
-    DrawTextureRec(idle,frame_rec,Vector2Subtract(pos,shift_vector),WHITE);
+    if(abs(dir.x)>0||abs(dir.y)>0){
+        if(dir.x>0&&dir.y==0){
+            frame_rec_running.width=132;
+        }
+        else if(dir.y==0){
+            frame_rec_running.width=-132;
+        }
+
+        DrawTextureRec(running,frame_rec_running,Vector2Add(pos,shift_vector),WHITE);
+        }
+    else{
+        if(frame_rec_running.width>0){
+            frame_rec_idle.width=164;
+        }
+        else{
+            frame_rec_idle.width=-164;
+        }
+        DrawTextureRec(idle,frame_rec_idle,Vector2Add(pos,shift_vector),WHITE);
+        }
 }
 
 void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {
@@ -92,9 +119,44 @@ void Player::plant(SpinachVec &spinach_vec,Vector2 plantpos) {
     }
 }
 
-void Player::shoot(BulletVec &bullet_vec, Vector2 &facing) {
+void Player::shoot(BulletVec &bullet_vec, Vector2 &facing,Gun gun) {
     if ( can_shoot ) {
-        bullet_vec.add(pos, facing);
+        Vector2 muzzle ={0,0};
+        Vector2 shot_dir ={0,0};
+        if(abs(gun.angle)<M_PI/8){ //left
+            muzzle={pos.x-318,pos.y};
+            shot_dir ={-1,0};
+        }
+        else if((gun.angle>3*M_PI/8)&&(gun.angle<5*M_PI/8)){//Down
+            muzzle={pos.x,pos.y+313};
+            shot_dir ={0,1};
+        }
+        else if(abs(gun.angle)>7*M_PI/8){ //right
+            muzzle={pos.x+318,pos.y};
+            shot_dir ={1,0};
+        }
+        else if((gun.angle<-3*M_PI/8)&&(gun.angle>-5*M_PI/8)){//Up
+            muzzle={pos.x,pos.y-313};
+            shot_dir ={0,-1};
+        }
+        else if((gun.angle<-5*M_PI/8)&&(gun.angle>-7*M_PI/8)){ //top right
+            muzzle={pos.x+258,pos.y-283};
+            shot_dir =Vector2Normalize({1,-1});
+        }
+        else if((gun.angle>5*M_PI/8)&&(gun.angle<7*M_PI/8)){ //bottom right
+             muzzle={pos.x+258,pos.y+283};
+             shot_dir =Vector2Normalize({1,1});
+        }
+        else if((gun.angle>M_PI/8)&&(gun.angle<3*M_PI/8)){ // bottom left
+             muzzle={pos.x-258,pos.y+283};
+             shot_dir =Vector2Normalize({-1,1});
+        }
+        else if((gun.angle<-M_PI/8)&&(gun.angle>-3*M_PI/8)){ //topleft
+            muzzle={pos.x-258,pos.y-283}; 
+            shot_dir =Vector2Normalize({-1,-1});
+        }
+
+        bullet_vec.add(muzzle,shot_dir);
         can_shoot = false;
         reload = reload_time;
     } 

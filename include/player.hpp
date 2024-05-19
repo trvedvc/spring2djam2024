@@ -5,6 +5,8 @@
 
 #include "spinach.hpp"
 #include "bullet.hpp"
+#include "gun.hpp"
+
 using namespace std;
 
 class Player {
@@ -12,6 +14,7 @@ class Player {
         Vector2 pos;
         float speed;
         Vector2 dir;
+        
 
         int dmg;
         float reload_time;
@@ -21,9 +24,11 @@ class Player {
         int frame_counter;
         Texture2D idle;
         Texture2D running;
-        Rectangle frame_rec;
+        Rectangle frame_rec_idle;
+        Rectangle frame_rec_running;
         int frame_speed;
-        int current_frame;
+        int current_frame_idle;
+        int current_frame_running;
         Vector2 shift_vector;
 
         int money;
@@ -40,7 +45,8 @@ class Player {
         void move(const float &delta);
         void draw();
         void plant(SpinachVec &spinachVec,Vector2 plantpos);
-        void shoot(BulletVec &bullet_vec, Vector2 &facing);
+        void shoot(BulletVec &bullet_vec, Vector2 &facing,Gun gun);
+        void changeDir();
 };
 
 #endif
