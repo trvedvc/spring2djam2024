@@ -123,8 +123,6 @@ int main () {
                 for ( int i = 0; i < day*5*0.3; i++) {
                     enemy_vec.add(new Enemy(randomCoordinates(),slug_run));
                 }
-            } else {
-                daytime = DAY;
             }
             mosin.tint =day_tint[daytime];
             player.tint = day_tint[daytime];
@@ -146,7 +144,7 @@ int main () {
             }
         }
 
-        player.update(delta, spinach_vec);\
+        player.update(delta, spinach_vec);
 
         enemy_vec.update(delta, spinach_vec);
         enemy_vec.move(delta);
@@ -182,23 +180,40 @@ int main () {
         
         mosin.draw();
 
-        DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
-        DrawText(TextFormat("Seed: %i", player.seeds), 10, 30, 20, BLACK);
+        //DrawText(TextFormat("Money: %i", player.money), 10, 10, 20, BLACK);
+        DrawText(TextFormat("Seeds: %i", player.seeds), 1650, 150, 50, BLACK);
+        DrawText(TextFormat("Day %i", day), 1700, 100, 50, BLACK);
+        DrawText(TextFormat("Score %i", player.score), 1700, 920, 50, BLACK);
 
+        DrawText("WASD to move!", 100, 960, 20, BLACK);
+        DrawText("ESC to quit! D:", 100, 980, 20, BLACK);
         if (daytime == DAY) {
             DrawText("Press R when ready!", 100, 100, 50, BLACK);
             DrawText("Press E to plant!", 100, 920, 20, BLACK);
-            DrawText("WASD to move!", 100, 960, 20, BLACK);
-            DrawText(TextFormat("Day %i", day), 1800, 100, 40, BLACK);
 
+            if (day == 1) {
+                DrawText("Press E to plant!", 100, 200, 50, BLACK);
+            }
+            if (day == 2) {
+                DrawText("Spinach is ready to harvest after 2 days!", 100, 200, 40, BLACK);
+            }
+            if (day == 3) {
+                DrawText("On spinach harvest, you get 1 or 2 seeds!", 100, 200, 40, BLACK);
+            }
         }else{
-            DrawText("Mouse Click to shoot!", 100, 1000, 20, BLACK);
+            DrawText("Mouse Click to shoot!", 100, 920, 20, BLACK);
             DrawText("Protect your spinach from slugs!", 100, 100, 50, BLACK);
-        }
-        EndDrawing();
+
         }
 
-    
+        if ( player.seeds == 0 && spinach_vec.spinaches.empty()) {
+            DrawText("GAME OVER", 500, 300, 100, BLACK);
+            DrawText(TextFormat("SCORE: %i", player.score), 500, 650, 90, BLACK);
+        }
+
+        EndDrawing();
+
+    }
 
     UnloadTexture(settxt);
     UnloadTexture(popeye_idle);
